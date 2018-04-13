@@ -45,6 +45,12 @@ if (hasGetUserMedia()) {
   alert('getUserMedia() is not supported in your browser');
 }
 
+function getUserMedia() {
+    if (navigator.mediaDevices) return navigator.mediaDevices.getUserMedia.apply(navigator.mediaDevices, arguments);
+    if (navigator.getUserMedia) return navigator.getUserMedia.apply(navigator, arguments);
+    alert('getUserMedia() is not supported in your browser');
+}
+
 
 
 
@@ -78,9 +84,13 @@ function AudioRecorder(config) {
   this.start = function () {
     setupStorage();
 
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(onMicrophoneCaptured)
-      .catch(onMicrophoneCaptureError);
+    if (navigator.mediaDevices) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(onMicrophoneCaptured)
+        .catch(onMicrophoneCaptureError);
+    } else {
+        navigator.getUserMedia({audio: true}, onMicrophoneCaptured, onMicrophoneCaptureError);
+    }
   };
 
   this.stop = function () {
