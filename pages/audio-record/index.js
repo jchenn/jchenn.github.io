@@ -84,13 +84,9 @@ function AudioRecorder(config) {
   this.start = function () {
     setupStorage();
 
-    if (navigator.mediaDevices) {
-        navigator.mediaDevices.getUserMedia({ audio: true })
+    navigator.mediaDevices.getUserMedia({ audio: true })
         .then(onMicrophoneCaptured)
         .catch(onMicrophoneCaptureError);
-    } else {
-        navigator.getUserMedia({audio: true}, onMicrophoneCaptured, onMicrophoneCaptureError);
-    }
   };
 
   this.stop = function () {
